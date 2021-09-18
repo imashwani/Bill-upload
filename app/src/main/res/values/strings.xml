@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">fie upload</string>
+    <string name="enable_gps">enable gps</string>
+    <string name="enable_now">enable now</string>
+    <string name="required_for_this_app">required for this app</string>
+    <string name="location_permission_not_granted">location permission not granted</string>
+</resources>
