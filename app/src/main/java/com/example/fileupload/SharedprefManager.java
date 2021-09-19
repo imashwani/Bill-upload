@@ -3,8 +3,6 @@ package com.example.fileupload;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.ConcurrentModificationException;
-
 public class SharedprefManager {
 
     private static final String SHARED_PREF_NAME = "my_shared_pref";
@@ -13,44 +11,54 @@ public class SharedprefManager {
 
     private Context context;
 
-    private SharedprefManager(Context context){
-        this.context= context;
+    private static SharedPreferences sharedPreferences;
+
+    private SharedprefManager(Context context) {
+        this.context = context;
     }
-    public static synchronized SharedprefManager getInstance(Context context){
-        if(mInstance == null){
+
+    public static synchronized SharedprefManager getInstance(Context context) {
+        if (mInstance == null) {
             mInstance = new SharedprefManager(context);
+            sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, context.MODE_PRIVATE);
         }
         return mInstance;
     }
-    public void saveUser(String token){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME,context.MODE_PRIVATE);
+
+    public void saveUser(String userName) {
+        saveKeyValuePair("user_name", userName);
+    }
+
+
+    public void saveToken(String token) {
+        saveKeyValuePair("token", token);
+    }
+
+    private void saveKeyValuePair(String key, String value) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putString("token", token);
+        editor.putString(key, value);
         editor.apply();
     }
-    public  boolean isLoggedIn(){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME,context.MODE_PRIVATE);
-       // if it is -1 then user is logged in
+
+    public boolean isLoggedIn() {
+        // if it is -1 then user is logged in
         // iska kuch krna padega
-       /*if(sharedPreferences.getString("token",-1) ! = -1){
-            return true;
-        }*/
-       return false;
+        if (sharedPreferences.getString("token", "").isEmpty()) {
+            return false;
+        }
+        return true;
     }
-    public String getUser(){
+
+    public String getUser() {
         //we can also create new class here
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME,context.MODE_PRIVATE);
-       return sharedPreferences.getString("token",null);
+        return sharedPreferences.getString("token", null);
 
     }
-    public void clear(){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME,context.MODE_PRIVATE);
+
+    public void clear() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
-
-
     }
-
 }
