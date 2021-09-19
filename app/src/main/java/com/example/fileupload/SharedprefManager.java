@@ -42,8 +42,7 @@ public class SharedprefManager {
     }
 
     public boolean isLoggedIn() {
-        // if it is -1 then user is logged in
-        // iska kuch krna padega
+        // if token is present then user is logged in
         if (sharedPreferences.getString("token", "").isEmpty()) {
             return false;
         }

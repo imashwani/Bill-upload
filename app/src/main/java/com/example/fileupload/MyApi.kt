@@ -22,9 +22,7 @@ interface MyApi {
     ): Call<UploadResponse>
 
     companion object {
-
         val BASE_URL = "http://ocrv1.herokuapp.com/"
-//        val BASE_URL = "http://10.0.2.2:8081"
         var okHttpClient = OkHttpClient.Builder()
             .connectTimeout(1, TimeUnit.MINUTES)
             .readTimeout(60, TimeUnit.SECONDS)

@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -16,7 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -24,7 +22,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.MultipartBody
-import okhttp3.internal.wait
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,10 +31,10 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.jvm.Throws
 
 class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
 
+    private var  sharedPreferenceManager: SharedprefManager = SharedprefManager.getInstance(this);
     private var selectedImage: Uri? = null
     private var data: String = ""
 
@@ -64,6 +61,19 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
         button_upload.setOnClickListener {
             uploadImage()
         }
+
+        logout_bt.setOnClickListener{
+            logout()
+        }
+    }
+
+    private fun logout() {
+        sharedPreferenceManager.clear();
+        // then go to the Mainactivity
+        val intent = Intent(this, LoginPage::class.java)
+        // for clearing tasks
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 
     private fun setUpLocationListener() {

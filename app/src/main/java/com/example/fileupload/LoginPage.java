@@ -33,9 +33,7 @@ public class LoginPage extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (SharedprefManager.getInstance(this).isLoggedIn()) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            openMainActivity();
         }
     }
 
@@ -57,8 +55,6 @@ public class LoginPage extends AppCompatActivity {
                     binding.inemail.requestFocus();
                     return;
                 }
-                Intent intent = new Intent(LoginPage.this, MainActivity.class);
-                startActivity(intent);
 
                 makeRequest();
             }
@@ -80,10 +76,7 @@ public class LoginPage extends AppCompatActivity {
                 SharedprefManager.getInstance(LoginPage.this)
                         .saveToken(token);
                 // then go to the Mainactivity
-                Intent intent = new Intent(LoginPage.this, MainActivity.class);
-                // for clearing tasks
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                openMainActivity();
             }
 
             @Override
@@ -93,5 +86,11 @@ public class LoginPage extends AppCompatActivity {
         });
     }
 
+    private void openMainActivity() {
+        Intent intent = new Intent(LoginPage.this, MainActivity.class);
+        // for clearing tasks
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
 
 }
