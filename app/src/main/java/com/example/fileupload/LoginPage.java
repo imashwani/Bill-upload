@@ -70,11 +70,13 @@ public class LoginPage extends AppCompatActivity {
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                SharedprefManager instance = SharedprefManager.getInstance(LoginPage.this);
                 String token = response.body().getToken();
+                String userName = response.body().getUserName();
 
-                // now save the data in shared prefernce
-                SharedprefManager.getInstance(LoginPage.this)
-                        .saveToken(token);
+                //save data in shared preference
+                instance.saveUserName(userName);
+                instance.saveToken(token);
                 // then go to the MainActivity
                 openMainActivity();
             }

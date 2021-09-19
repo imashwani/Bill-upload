@@ -29,7 +29,7 @@ public class SharedprefManager {
         return mInstance;
     }
 
-    public void saveUser(String userName) {
+    public void saveUserName(String userName) {
         saveKeyValuePair(USER_NAME, userName);
     }
 
@@ -53,10 +53,8 @@ public class SharedprefManager {
         return true;
     }
 
-    public String getUser() {
-        //we can also create new class here
-        return sharedPreferences.getString(TOKEN, null);
-
+    public String getUserName() {
+        return sharedPreferences.getString(USER_NAME, null);
     }
 
     public void clear() {

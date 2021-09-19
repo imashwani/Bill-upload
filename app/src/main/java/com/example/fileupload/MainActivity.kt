@@ -51,6 +51,11 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        var userName = sharedPreferenceManager.userName
+        if (userName !=null){
+            welcome.setText("hey, $userName")
+        }
+
         image_view.setOnClickListener {
             openImageChooser()
         }
