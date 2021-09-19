@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         // for tool bar
         val toolbar = findViewById(R.id.toolbars) as Toolbar?
         setSupportActionBar(toolbar)
@@ -75,9 +76,6 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
             uploadImage()
         }
 
-        logout_bt.setOnClickListener {
-            logout()
-        }
     }
 
     // for action bar and menu_title for three dots!!!!
@@ -95,7 +93,6 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
         }
         return true
     }
-
 
     private fun logout() {
         sharedPreferenceManager.clear();
