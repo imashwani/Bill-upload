@@ -5,10 +5,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
+import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 
@@ -18,7 +15,8 @@ interface MyApi {
     @POST("upload")
     fun uploadImage(
         @Part file: MultipartBody.Part,
-        @Part data: MultipartBody.Part
+        @Part data: MultipartBody.Part,
+        @HeaderMap headerMap: Map<String, String>
     ): Call<UploadResponse>
 
     companion object {

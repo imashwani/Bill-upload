@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
+import com.example.fileupload.Constants.TOKEN
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -31,10 +32,11 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
 
-    private var  sharedPreferenceManager: SharedprefManager = SharedprefManager.getInstance(this);
+    private var sharedPreferenceManager: SharedprefManager = SharedprefManager.getInstance(this);
     private var selectedImage: Uri? = null
     private var data: String = ""
 
@@ -62,7 +64,7 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
             uploadImage()
         }
 
-        logout_bt.setOnClickListener{
+        logout_bt.setOnClickListener {
             logout()
         }
     }
@@ -136,6 +138,13 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!sharedPreferenceManager.isLoggedIn()) {
+            logout()
+        }
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -180,19 +189,30 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
         progress_bar.progress = 0
         val body = UploadRequestBody(file, "image", this)
 
+        var headerMap: Map<String, String> =
+            mapOf(TOKEN to sharedPreferenceManager.getUserToken())
+
         MyApi().uploadImage(
             MultipartBody.Part.createFormData("file", file.name, body),
-            MultipartBody.Part.createFormData("data", data)
+            MultipartBody.Part.createFormData("data", data),
+            headerMap
         ).enqueue(object : Callback<UploadResponse> {
             override fun onResponse(
                 call: Call<UploadResponse>,
                 response: Response<UploadResponse>
             ) {
+                if (response.code() == 401) {
+                    logout()
+                }
+
                 progress_bar.progress = 100
-                layout_root.snackbar(response.body()?.success.toString())
-                image_view.setImageResource(R.drawable.ic_upload)
-                Thread.sleep(300)
-                progress_bar.progress = 0
+
+                if (response.code() == 200) {
+                    layout_root.snackbar(response.body()?.success.toString())
+                    image_view.setImageResource(R.drawable.ic_upload)
+                    Thread.sleep(300)
+                    progress_bar.progress = 0
+                }
             }
 
             override fun onFailure(call: Call<UploadResponse>, t: Throwable) {
@@ -217,8 +237,6 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
         if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
             val bitmap: Bitmap = BitmapFactory.decodeFile(currentPhotoPath)
             image_view.setImageBitmap(bitmap)
-
-//            display()
         } else
             if (resultCode == Activity.RESULT_OK) {
                 when (requestCode) {
@@ -287,22 +305,4 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
         }
 
     }
-
-//    private fun display() {
-//        val filePath = mutableListOf<String>()
-//        try {
-//            imageDir = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!.path)
-//
-//            for (i in imageDir.list().reversed().indices) {
-//                imageFile = File(imageDir.path + "/" + imageDir.list()[i])
-//                val p = imageFile.path
-//                filePath.add(p)
-//            }
-//            image_recycler_view.layoutManager = LinearLayoutManager(this)
-//            image_recycler_view.adapter = ImageAdapter(filePath)
-//
-//        } catch (exception: Exception) {
-//            Toast.makeText(applicationContext, exception.toString(), Toast.LENGTH_LONG).show()
-//        }
-//    }
 }

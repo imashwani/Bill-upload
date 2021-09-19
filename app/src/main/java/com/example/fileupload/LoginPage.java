@@ -75,7 +75,7 @@ public class LoginPage extends AppCompatActivity {
                 // now save the data in shared prefernce
                 SharedprefManager.getInstance(LoginPage.this)
                         .saveToken(token);
-                // then go to the Mainactivity
+                // then go to the MainActivity
                 openMainActivity();
             }
 

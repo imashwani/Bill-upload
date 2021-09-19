@@ -3,9 +3,13 @@ package com.example.fileupload;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import static com.example.fileupload.Constants.TOKEN;
+
 public class SharedprefManager {
 
     private static final String SHARED_PREF_NAME = "my_shared_pref";
+
+    public static final String USER_NAME = "user_name";
 
     private static SharedprefManager mInstance;
 
@@ -26,12 +30,12 @@ public class SharedprefManager {
     }
 
     public void saveUser(String userName) {
-        saveKeyValuePair("user_name", userName);
+        saveKeyValuePair(USER_NAME, userName);
     }
 
 
     public void saveToken(String token) {
-        saveKeyValuePair("token", token);
+        saveKeyValuePair(TOKEN, token);
     }
 
     private void saveKeyValuePair(String key, String value) {
@@ -43,7 +47,7 @@ public class SharedprefManager {
 
     public boolean isLoggedIn() {
         // if token is present then user is logged in
-        if (sharedPreferences.getString("token", "").isEmpty()) {
+        if (sharedPreferences.getString(TOKEN, "").isEmpty()) {
             return false;
         }
         return true;
@@ -51,7 +55,7 @@ public class SharedprefManager {
 
     public String getUser() {
         //we can also create new class here
-        return sharedPreferences.getString("token", null);
+        return sharedPreferences.getString(TOKEN, null);
 
     }
 
@@ -59,5 +63,9 @@ public class SharedprefManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
+    }
+
+    public String getUserToken() {
+        return sharedPreferences.getString(TOKEN, null);
     }
 }
