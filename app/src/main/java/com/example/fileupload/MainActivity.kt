@@ -11,8 +11,11 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Looper
 import android.provider.MediaStore
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import com.example.fileupload.Constants.TOKEN
@@ -50,6 +53,9 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        // for tool bar
+        val toolbar = findViewById(R.id.toolbars) as Toolbar?
+        setSupportActionBar(toolbar)
 
         var userName = sharedPreferenceManager.userName
         if (userName !=null){
@@ -73,6 +79,23 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
             logout()
         }
     }
+
+    // for action bar and menu_title for three dots!!!!
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu,menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.logout-> {
+                logout()
+            }
+        }
+        return true
+    }
+
 
     private fun logout() {
         sharedPreferenceManager.clear();
