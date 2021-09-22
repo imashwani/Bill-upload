@@ -1,5 +1,6 @@
 package com.example.fileupload
 
+import com.example.fileupload.model.LoginResponse
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -10,15 +11,6 @@ import java.util.concurrent.TimeUnit
 
 
 interface MyApi {
-
-    @Multipart
-    @POST("upload")
-    fun uploadImage(
-        @Part file: MultipartBody.Part,
-        @Part data: MultipartBody.Part,
-        @HeaderMap headerMap: Map<String, String>
-    ): Call<UploadResponse>
-
     companion object {
         val BASE_URL = "http://ocrv1.herokuapp.com/"
         var okHttpClient = OkHttpClient.Builder()
@@ -36,4 +28,12 @@ interface MyApi {
                 .create(MyApi::class.java)
         }
     }
+
+    @Multipart
+    @POST("upload")
+    fun uploadImage(
+        @Part file: MultipartBody.Part,
+        @Part data: MultipartBody.Part,
+        @HeaderMap headerMap: Map<String, String>
+    ): Call<UploadResponse>
 }

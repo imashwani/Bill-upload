@@ -9,14 +9,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClientSingleton {
 
-    public static final String BASE_LOGIN = "https://api.mocklets.com/p68332/";
+    public static final String BASE_LOGIN = "http://ocrv1.herokuapp.com/";
 
     private static RetrofitClientSingleton mInstance;
     private Retrofit retrofit;
 
     // private constructor
     private RetrofitClientSingleton() {
-
         getGsonBuilder();
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_LOGIN)
@@ -25,7 +24,7 @@ public class RetrofitClientSingleton {
     }
 
     private Gson getGsonBuilder() {
-      return new GsonBuilder()
+        return new GsonBuilder()
                 .enableComplexMapKeySerialization()
                 .serializeNulls()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)

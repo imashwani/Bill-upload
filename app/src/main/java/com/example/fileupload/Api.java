@@ -1,17 +1,23 @@
 package com.example.fileupload;
 
 import com.example.fileupload.model.LoginResponse;
+import com.example.fileupload.model.LogoutResponse;
 
 import retrofit2.Call;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.POST;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Query;
 
 public interface Api {
-    @FormUrlEncoded
-    @POST("login")
-    Call<LoginResponse> loginUser(
-            @Field("email") String email,
-            @Field("password") String password
+    @GET("auth/login")
+    Call<LoginResponse> login(
+            @Header("Cookie") String token,
+            @Query("username") String username,
+            @Query("password") String password
+    );
+
+    @GET("auth/login")
+    Call<LogoutResponse> logout(
+            @Header("Cookie") String token
     );
 }

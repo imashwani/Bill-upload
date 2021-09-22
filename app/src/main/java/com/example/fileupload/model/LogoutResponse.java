@@ -1,15 +1,8 @@
 package com.example.fileupload.model;
 
-
-public class LoginResponse {
+public class LogoutResponse {
     private String info;
-    private Payload payload;
-
-
-    public LoginResponse(String info, Payload payload) {
-        this.info = info;
-        this.payload = payload;
-    }
+    private String payload;
 
     public String getInfo() {
         return info;
@@ -19,11 +12,11 @@ public class LoginResponse {
         this.info = info;
     }
 
-    public Payload getPayload() {
+    public String getPayload() {
         return payload;
     }
 
-    public void setPayload(Payload payload) {
+    public void setPayload(String payload) {
         this.payload = payload;
     }
 }

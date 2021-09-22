@@ -19,6 +19,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import com.example.fileupload.Constants.TOKEN
+import com.example.fileupload.model.LogoutResponse
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -35,7 +36,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
 
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
         setSupportActionBar(toolbar)
 
         var userName = sharedPreferenceManager.userName
-        if (userName !=null){
+        if (userName != null) {
             welcome.setText("hey, $userName")
         }
 
@@ -80,14 +80,14 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
 
     // for action bar and menu_title for three dots!!!!
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.toolbar_menu,menu)
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
 
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.logout-> {
+            R.id.logout -> {
                 logout()
             }
         }
@@ -95,8 +95,29 @@ class MainActivity : AppCompatActivity(), UploadRequestBody.UploadCallback {
     }
 
     private fun logout() {
+
+        var token: String = sharedPreferenceManager.userToken;
+        RetrofitClientSingleton.getInstance()
+            .api
+            .logout(token).enqueue(object : Callback<LogoutResponse> {
+                override fun onResponse(
+                    call: Call<LogoutResponse>,
+                    response: Response<LogoutResponse>
+                ) {
+                    Toast.makeText(
+                        this@MainActivity, "logout successful",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+                override fun onFailure(call: Call<LogoutResponse>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
+
         sharedPreferenceManager.clear();
-        // then go to the Mainactivity
         val intent = Intent(this, LoginPage::class.java)
         // for clearing tasks
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
